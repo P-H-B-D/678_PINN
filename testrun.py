@@ -129,5 +129,7 @@ if __name__ == "__main__":
         ax.legend()
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
+    #save to gif
+    anim.save('logistic.gif', dpi=80, writer='imagemagick')
 
     plt.show()

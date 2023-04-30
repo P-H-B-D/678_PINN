@@ -8,6 +8,12 @@ Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the
 
 Additionally, I implement a methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
 
+### Exponential
+![](https://github.com/P-H-B-D/678_PINN/blob/main/exponential.gif)
+
+### Simple Harmonic Oscillator
+![](https://github.com/P-H-B-D/678_PINN/blob/main/Harmonic.gif)
+
 References:
 * https://github.com/madagra/basic-pinn 
 * https://www.sciencedirect.com/science/article/pii/S0021999118307125

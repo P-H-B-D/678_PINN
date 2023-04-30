@@ -51,7 +51,7 @@ def make_loss_fn(f: Callable, dfdx: Callable) -> Callable:
 
         #Addition: Weighting of the loss. This is a hyperparameter that can be tuned. 
 
-        weight_interior = 1.0
+        weight_interior = 8.0
         weight_boundary = 1.0  # Higher weight for boundary loss, for example
 
         loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weight_boundary * loss(boundary, torch.zeros_like(boundary))
@@ -134,18 +134,19 @@ if __name__ == "__main__":
             color="green",
             alpha=0.75,
         )
-        ax.set(title="Logistic equation solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
+        ax.set(title="Exponential PINN Solution\n"r"$\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$", xlabel="t", ylabel="f(t)")
         ax.set_ylim(-2,5)
         ax.legend()
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
     #save to gif
-    # anim.save('logistic.gif', dpi=80, writer='imagemagick')
+    anim.save('exponential.gif', dpi=80, writer='imagemagick')
 
     plt.show()
 
     # plot loss evolution
     plt.plot(loss_evolution)
+    plt.yscale('log')
     plt.title("Loss evolution")
     plt.xlabel("Epoch")
     plt.ylabel("Loss")

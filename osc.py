@@ -44,7 +44,7 @@ def make_loss_fn(f: Callable, d2fdx2: Callable) -> Callable:
         loss = nn.MSELoss()
 
         # Weighting of the loss
-        weight_interior = 2.0
+        weight_interior = 3.0
         weight_boundary_1 = 1.0
         weight_boundary_2 = 1.0
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     parser.add_argument("-n", "--num-hidden", type=int, default=4)
     parser.add_argument("-d", "--dim-hidden", type=int, default=20)
     parser.add_argument("-b", "--batch-size", type=int, default=100)
-    parser.add_argument("-lr", "--learning-rate", type=float, default=0.7e-2)
+    parser.add_argument("-lr", "--learning-rate", type=float, default=1.5e-2)
     parser.add_argument("-e", "--num-epochs", type=int, default=500)
 
     args = parser.parse_args()
@@ -130,13 +130,15 @@ if __name__ == "__main__":
             color="green",
             alpha=0.75,
         )
-        ax.set(title="Logistic equation solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
+        #set the title to the differential equation d2f/dt2 = -k / m * f(t), k=1,m=1, f(0)=1, f'(0)=0
+        # ax.set(title="Simple Harmonic Oscillator equation solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
+        ax.set(title="Simple Harmonic Oscillator PINN Solution\n"+r"$\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$", xlabel="t", ylabel="f(t)")
         ax.set_ylim(-2,5)
         ax.legend()
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
     #save to gif
-    # anim.save('logistic.gif', dpi=80, writer='imagemagick')
+    anim.save('Harmonic.gif', dpi=80, writer='imagemagick')
 
     plt.show()
 

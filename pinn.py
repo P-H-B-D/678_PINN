@@ -59,7 +59,7 @@ def make_forward_fn(
     initialized randomly and the composable v-mapped version of the forward pass
     and of higher-order derivatives with respect to the inputs as
     specified by the input argument `derivative_order`
-    The forward pass is created as a closure
+    The forward pass is created as a closurcoloce
     Args:
         num_inputs (int, optional): The number of input dimensions
         num_outputs (int, optional): The number of outputs of the model, in general is 1

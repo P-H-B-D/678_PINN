@@ -12,9 +12,9 @@ from pinn import make_forward_fn
 
 #Based off of https://github.com/madagra/basic-pinn. 
 
-R = 1.1  # rate of maximum population growth parameterizing the equation
+R = 0.3  # rate of maximum population growth parameterizing the equation
 X_BOUNDARY = 0.0  # boundary condition coordinate
-F_BOUNDARY = 0.8  # boundary condition value
+F_BOUNDARY = 0.3  # boundary condition value
 
 
 def make_loss_fn(f: Callable, dfdx: Callable) -> Callable:
@@ -38,7 +38,7 @@ def make_loss_fn(f: Callable, dfdx: Callable) -> Callable:
 
         # interior loss
         f_value = f(x, params)
-        interior = dfdx(x, params) - R * f_value * (1 - f_value)
+        interior = dfdx(x, params) - R * f_value
 
         # boundary loss
         x0 = X_BOUNDARY
@@ -52,7 +52,7 @@ def make_loss_fn(f: Callable, dfdx: Callable) -> Callable:
         #Addition: Weighting of the loss. This is a hyperparameter that can be tuned. 
 
         weight_interior = 1.0
-        weight_boundary = 3.0  # Higher weight for boundary loss, for example
+        weight_boundary = 1.0  # Higher weight for boundary loss, for example
 
         loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weight_boundary * loss(boundary, torch.zeros_like(boundary))
         
@@ -73,11 +73,11 @@ if __name__ == "__main__":
     # parse input from user
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-n", "--num-hidden", type=int, default=4)
+    parser.add_argument("-n", "--num-hidden", type=int, default=5)
     parser.add_argument("-d", "--dim-hidden", type=int, default=10)
-    parser.add_argument("-b", "--batch-size", type=int, default=30)
+    parser.add_argument("-b", "--batch-size", type=int, default=100)
     parser.add_argument("-lr", "--learning-rate", type=float, default=1e-2)
-    parser.add_argument("-e", "--num-epochs", type=int, default=150)
+    parser.add_argument("-e", "--num-epochs", type=int, default=500)
 
     args = parser.parse_args()
 
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     num_iter = args.num_epochs
     tolerance = 1e-8
     learning_rate = args.learning_rate
-    domain = (-10.0, 10.0)
+    domain = (-5.0, 5.0)
 
     # function versions of model forward, gradient and loss
     fmodel, params, funcs = make_forward_fn(
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     fig, ax = plt.subplots()
     x_eval = torch.linspace(domain[0], domain[1], steps=100).reshape(-1, 1)
     x_eval_np = x_eval.detach().numpy()
-    analytical_sol_fn = lambda x: 1.0 / (1.0 + (1.0/F_BOUNDARY - 1.0) * np.exp(-R * x))
+    analytical_sol_fn = lambda x: R*np.exp(R*x)
 
     def update(i):
         global params
@@ -119,6 +119,8 @@ if __name__ == "__main__":
         # Update the parameters
         loss = loss_fn(params, x)
         params = optimizer.step(loss, params)
+        loss_evolution.append(loss.item())
+        print("Epoch: {}, Loss: {}".format(i, loss.item()))
 
         x_sample_np = torch.FloatTensor(batch_size).uniform_(domain[0], domain[1]).detach().numpy()
         f_eval = f(x_eval, params)
@@ -133,7 +135,7 @@ if __name__ == "__main__":
             alpha=0.75,
         )
         ax.set(title="Logistic equation solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
-        ax.set_ylim(-0.2,1.2)
+        ax.set_ylim(-2,5)
         ax.legend()
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
@@ -141,4 +143,12 @@ if __name__ == "__main__":
     # anim.save('logistic.gif', dpi=80, writer='imagemagick')
 
     plt.show()
+
+    # plot loss evolution
+    plt.plot(loss_evolution)
+    plt.title("Loss evolution")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.show()
+    
 

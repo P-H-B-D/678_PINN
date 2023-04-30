@@ -15,9 +15,9 @@ from pinn import make_forward_fn
 # Oscillator motion parameters
 m = 1.0  # mass
 k = 1.0  # spring constant
-x0 = 1.0  # initial displacement
+x0 = 2.0  # initial displacement
 v0 = 0.0  # initial velocity
-c = 0.5  # damping coefficient
+c = 0.2  # damping coefficient
 
 # Boundary conditions
 X_BOUNDARY_1 = 0.0
@@ -70,11 +70,11 @@ if __name__ == "__main__":
     # parse input from user
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-n", "--num-hidden", type=int, default=5)
-    parser.add_argument("-d", "--dim-hidden", type=int, default=80)
-    parser.add_argument("-b", "--batch-size", type=int, default=30)
-    parser.add_argument("-lr", "--learning-rate", type=float, default=1e-3)
-    parser.add_argument("-e", "--num-epochs", type=int, default=1500)
+    parser.add_argument("-n", "--num-hidden", type=int, default=4)
+    parser.add_argument("-d", "--dim-hidden", type=int, default=20)
+    parser.add_argument("-b", "--batch-size", type=int, default=100)
+    parser.add_argument("-lr", "--learning-rate", type=float, default=1.1e-2)
+    parser.add_argument("-e", "--num-epochs", type=int, default=1000)
 
     args = parser.parse_args()
 
@@ -138,13 +138,13 @@ if __name__ == "__main__":
             color="green",
             alpha=0.75,
         )
-        ax.set(title="Logistic equation solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
+        ax.set(title="Damped Harmonic Oscillator PINN Solution\n"+r"$\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$", xlabel="t", ylabel="f(t)")
         ax.set_ylim(-2,5)
         ax.legend()
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
     #save to gif
-    # anim.save('logistic.gif', dpi=80, writer='imagemagick')
+    anim.save('dampedHarmonic.gif', dpi=80, writer='imagemagick')
 
     plt.show()
 

@@ -73,8 +73,8 @@ if __name__ == "__main__":
     parser.add_argument("-n", "--num-hidden", type=int, default=4)
     parser.add_argument("-d", "--dim-hidden", type=int, default=20)
     parser.add_argument("-b", "--batch-size", type=int, default=100)
-    parser.add_argument("-lr", "--learning-rate", type=float, default=1.1e-2)
-    parser.add_argument("-e", "--num-epochs", type=int, default=1000)
+    parser.add_argument("-lr", "--learning-rate", type=float, default=2.0e-2)
+    parser.add_argument("-e", "--num-epochs", type=int, default=3000)
 
     args = parser.parse_args()
 
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     num_iter = args.num_epochs
     tolerance = 1e-8
     learning_rate = args.learning_rate
-    domain = (0, 10.0)
+    domain = (0, 20.0)
 
     # function versions of model forward, gradient and loss
     fmodel, params, funcs = make_forward_fn(
@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
     #save to gif
-    anim.save('dampedHarmonic.gif', dpi=80, writer='imagemagick')
+    # anim.save('dampedHarmonic.gif', dpi=80, writer='imagemagick')
 
     plt.show()
 

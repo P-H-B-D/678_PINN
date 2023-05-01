@@ -132,13 +132,15 @@ if __name__ == "__main__":
             color="green",
             alpha=0.75,
         )
-        ax.set(title="Logistic equation solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
+        
+        ax.set(title=" solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
+        ax.set(title="Logistic Equation "+ r"$\frac{df}{dt} = Rf(t)(1-f(t)),\ R\in\mathbb{R},\ f(0)=0.8, R=1.1$" +"\n PINN Solution (iter {})".format(i), xlabel="t", ylabel="f(t)")
         ax.set_ylim(-0.2,1.2)
         ax.legend()
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
     #save to gif
-    # anim.save('logistic.gif', dpi=80, writer='imagemagick')
+    anim.save('logistic.gif', dpi=80, writer='imagemagick')
 
     plt.show()
 

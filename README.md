@@ -14,6 +14,10 @@ Additionally, I implement a methodology for dynamically weighting the contributi
 ### Simple Harmonic Oscillator
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/Harmonic.gif)
 
+### Damped Harmonic Oscillator
+![](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.gif)
+
+
 References:
 * https://github.com/madagra/basic-pinn 
 * https://www.sciencedirect.com/science/article/pii/S0021999118307125

@@ -6,7 +6,7 @@ A Variety of Physics Informed Neural Network (PINN) demonstrations for PHYS678 (
 
 Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the framework to include another first order ODE (exponential curve) and two second order ODEs (simple harmonic oscilator and damped harmonic oscillator). Additionally, I explore the effects of hyperparameters on the performance of these systems in these simple demonstrations. 
 
-(IN PROGRESS): Additionally, I implement a methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
+Additionally, I implement a methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
 
 ### Exponential
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/exponential.gif)
@@ -19,6 +19,9 @@ Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the
 
 ### Sparse Data Regression
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/HarmonicSparseData.gif)
+
+### Dynamic Weighting of Interior and Boundary Terms
+![](https://github.com/P-H-B-D/678_PINN/blob/main/DynamicWeighting.gif)
 
 
 References:

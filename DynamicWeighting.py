@@ -134,7 +134,7 @@ if __name__ == "__main__":
     # train the model
     loss_evolution = []
     og_loss_evolution = []
-    fig, ax = plt.subplots()
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
     x_eval = torch.linspace(domain[0], domain[1], steps=100).reshape(-1, 1)
     x_eval_np = x_eval.detach().numpy()
     analytical_sol_fn = (
@@ -143,13 +143,15 @@ if __name__ == "__main__":
 
     def update(i):
         global params
-        ax.clear()
+        ax1.clear()
+        ax2.clear()
+        ax3.clear()
 
         # Sample points in the domain randomly for each epoch
         x = torch.FloatTensor(batch_size).uniform_(domain[0], domain[1])
 
         # Update the parameters
-        og_loss= og_loss_fn(params, x)
+        og_loss = og_loss_fn(params, x)
         og_loss_evolution.append(og_loss.item())
 
         loss = loss_fn(params, x, i, num_iter)
@@ -161,39 +163,34 @@ if __name__ == "__main__":
         f_eval = f(x_eval, params)
 
         # ax.scatter(x_sample_np, analytical_sol_fn(x_sample_np), color="red", label="Sample training points")
-        ax.plot(x_eval_np, f_eval.detach().numpy(), label="PINN solution at iter {}".format(i))
-        ax.plot(
+        ax1.plot(x_eval_np, f_eval.detach().numpy(), label="PINN solution at iter {}".format(i))
+        ax1.plot(
             x_eval_np,
             analytical_sol_fn(x_eval_np),
             label=f"Analytic solution",
             color="green",
             alpha=0.75,
         )
-        #set the title to the differential equation d2f/dt2 = -k / m * f(t), k=1,m=1, f(0)=1, f'(0)=0
-        # ax.set(title="Simple Harmonic Oscillator equation solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
-        ax.set(title="Simple Harmonic Oscillator PINN Solution\n"+r"$\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$", xlabel="t", ylabel="f(t)")
-        ax.set_ylim(-2,5)
-        ax.legend()
+        ax1.set(title="Simple Harmonic Oscillator PINN Solution\n"+r"$\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$", xlabel="t", ylabel="f(t)")
+        ax1.set_ylim(-2,5)
+        ax1.legend()
+
+        # Dynamic Loss evolution plot
+        ax2.plot(loss_evolution)
+        ax2.set_title("Dynamic Loss evolution")
+        ax2.set_xlabel("Epoch")
+        ax2.set_ylabel("Loss")
+
+        # Static Loss evolution plot
+        ax3.plot(og_loss_evolution)
+        ax3.set_title("Static Loss evolution")
+        ax3.set_xlabel("Epoch")
+        ax3.set_ylabel("Loss")
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
-    #save to gif
-    # anim.save('Harmonic.gif', dpi=80, writer='imagemagick')
-
+    anim.save('dynamic_loss.gif', dpi=80, writer='imagemagick')
     plt.show()
 
-    # plot loss evolution
-    plt.plot(loss_evolution)
-    plt.title("Dynamic Loss evolution")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.show()
-    
-    # plot loss evolution
-    plt.plot(og_loss_evolution)
-    plt.title("Static Loss evolution")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.show()
     
     
 

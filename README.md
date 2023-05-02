@@ -17,6 +17,9 @@ Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the
 ### Damped Harmonic Oscillator
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.gif)
 
+### Sparse Data Regression
+![](https://github.com/P-H-B-D/678_PINN/blob/main/HarmonicSparseData.gif)
+
 
 References:
 * https://github.com/madagra/basic-pinn 

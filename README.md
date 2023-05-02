@@ -21,7 +21,7 @@ Additionally, I implement a methodology for dynamically weighting the contributi
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/HarmonicSparseData.gif)
 
 ### Dynamic Weighting of Interior and Boundary Terms
-![](https://github.com/P-H-B-D/678_PINN/blob/main/DynamicWeighting.gif)
+![](https://github.com/P-H-B-D/678_PINN/blob/main/dynamic_loss.gif)
 
 
 References:

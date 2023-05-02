@@ -38,7 +38,7 @@ def make_loss_fn(f: Callable, dfdx: Callable) -> Callable:
 
         # interior loss
         f_value = f(x, params)
-        interior = dfdx(x, params) - R * f_value
+        interior = dfdx(x, params) - R * f_value #for exponential equation df/dt=Rf -> df/dt-Rf=0
 
         # boundary loss
         x0 = X_BOUNDARY
@@ -46,14 +46,10 @@ def make_loss_fn(f: Callable, dfdx: Callable) -> Callable:
         x_boundary = torch.tensor([x0])
         f_boundary = torch.tensor([f0])
         boundary = f(x_boundary, params) - f_boundary
-
         loss = nn.MSELoss()
-
-        #Addition: Weighting of the loss. This is a hyperparameter that can be tuned. 
-
         weight_interior = 8.0
-        weight_boundary = 1.0  # Higher weight for boundary loss, for example
-
+        weight_boundary = 1.0 
+        #total loss
         loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weight_boundary * loss(boundary, torch.zeros_like(boundary))
         
         # loss_value = loss(interior, torch.zeros_like(interior)) + loss(
@@ -151,5 +147,13 @@ if __name__ == "__main__":
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
     plt.show()
+
+    #plot the loss evolution
+    plt.plot(loss_evolution)
+    plt.title("Loss evolution")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.show()
+
     
 

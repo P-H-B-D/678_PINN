@@ -118,6 +118,7 @@ if __name__ == "__main__":
 
         # Update the parameters
         loss = loss_fn(params, x)
+        loss_evolution.append(loss.item())
         params = optimizer.step(loss, params)
 
         x_sample_np = torch.FloatTensor(batch_size).uniform_(domain[0], domain[1]).detach().numpy()
@@ -133,6 +134,7 @@ if __name__ == "__main__":
             alpha=0.75,
         )
         
+
         ax.set(title=" solved with PINNs (iter {})".format(i), xlabel="t", ylabel="f(t)")
         ax.set(title="Logistic Equation "+ r"$\frac{df}{dt} = Rf(t)(1-f(t)),\ R\in\mathbb{R},\ f(0)=0.8, R=1.1$" +"\n PINN Solution (iter {})".format(i), xlabel="t", ylabel="f(t)")
         ax.set_ylim(-0.2,1.2)
@@ -140,7 +142,11 @@ if __name__ == "__main__":
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
     #save to gif
-    anim.save('logistic.gif', dpi=80, writer='imagemagick')
-
+    # anim.save('logistic.gif', dpi=80, writer='imagemagick')
     plt.show()
-
+    #plot the loss
+    plt.plot(loss_evolution)
+    plt.title("Loss Evolution")
+    plt.xlabel("Epoch")
+    plt.ylabel("Loss")
+    plt.show()

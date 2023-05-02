@@ -44,9 +44,9 @@ def make_loss_fn(f: Callable, d2fdx2: Callable) -> Callable:
         loss = nn.MSELoss()
 
         # Weighting of the loss
-        weight_interior = 3.0
-        weight_boundary_1 = 1.0
-        weight_boundary_2 = 1.0
+        weight_interior = 0.25
+        weight_boundary_1 = 0.37
+        weight_boundary_2 = 0.37
 
         loss_value = (
             weight_interior * loss(interior, torch.zeros_like(interior))
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     parser.add_argument("-n", "--num-hidden", type=int, default=4)
     parser.add_argument("-d", "--dim-hidden", type=int, default=20)
     parser.add_argument("-b", "--batch-size", type=int, default=100)
-    parser.add_argument("-lr", "--learning-rate", type=float, default=1.5e-2)
+    parser.add_argument("-lr", "--learning-rate", type=float, default=1e-2)
     parser.add_argument("-e", "--num-epochs", type=int, default=500)
 
     args = parser.parse_args()
@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
     #save to gif
-    anim.save('Harmonic.gif', dpi=80, writer='imagemagick')
+    # anim.save('Harmonic.gif', dpi=80, writer='imagemagick')
 
     plt.show()
 
@@ -149,25 +149,6 @@ if __name__ == "__main__":
     plt.ylabel("Loss")
     plt.show()
     
-    # Forecasting and plot
-    extended_domain = (domain[0], domain[1] + 10)
-    x_extended_eval = torch.linspace(extended_domain[0], extended_domain[1], steps=200).reshape(-1, 1)
-    x_extended_eval_np = x_extended_eval.detach().numpy()
-
-    f_extended_eval = f(x_extended_eval, params)
-
-    # Plot the analytical solution and PINN prediction
-    plt.plot(x_extended_eval_np, f_extended_eval.detach().numpy(), label="PINN Forecast", color="orange")
-    plt.plot(x_extended_eval_np, analytical_sol_fn(x_extended_eval_np), label="Analytical Solution", color="blue")
-
-    # Highlight the forecasted portion
-    plt.axvspan(domain[1], extended_domain[1], alpha=0.1, color="red")
-
-    plt.title("PINN Forecast vs Analytical Solution")
-    plt.xlabel("t")
-    plt.ylabel("f(t)")
-    plt.legend()
-    plt.show()
-
+    
     
 

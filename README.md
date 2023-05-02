@@ -22,5 +22,7 @@ Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the
 
 
 References:
-* https://github.com/madagra/basic-pinn 
-* https://www.sciencedirect.com/science/article/pii/S0021999118307125
+* NN Base Code https://github.com/madagra/basic-pinn 
+* PINN Theory https://www.sciencedirect.com/science/article/pii/S0021999118307125
+* PINN Theory https://www.nature.com/articles/s42254-021-00314-5  
+* Dynamic Hyperparameters: https://proceedings.neurips.cc/paper_files/paper/2018/file/8051a3c40561002834e59d566b7430cf-Paper.pdf 

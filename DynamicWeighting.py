@@ -77,9 +77,9 @@ def make_dynamic_loss_fn(f: Callable, d2fdx2: Callable) -> Callable:
         loss = nn.MSELoss()
 
         # Weighting of the loss
-        weight_interior = 0.25 * (1-(epoch/num_epochs))
-        weight_boundary_1 = 0.37 * (1-(epoch/num_epochs))
-        weight_boundary_2 = 0.37 * (1-(epoch/num_epochs))
+        weight_interior = 0.25 + (1-(epoch/num_epochs))
+        weight_boundary_1 = 0.37 + ((epoch/num_epochs))
+        weight_boundary_2 = 0.37 + ((epoch/num_epochs))
         print(1-(epoch/num_epochs))
 
         loss_value = (
@@ -104,7 +104,7 @@ if __name__ == "__main__":
     parser.add_argument("-n", "--num-hidden", type=int, default=4)
     parser.add_argument("-d", "--dim-hidden", type=int, default=20)
     parser.add_argument("-b", "--batch-size", type=int, default=100)
-    parser.add_argument("-lr", "--learning-rate", type=float, default=1e-2)
+    parser.add_argument("-lr", "--learning-rate", type=float, default=0.8e-2)
     parser.add_argument("-e", "--num-epochs", type=int, default=500)
 
     args = parser.parse_args()

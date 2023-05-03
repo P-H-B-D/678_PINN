@@ -2,6 +2,8 @@
 
 A Variety of Physics Informed Neural Network (PINN) demonstrations for PHYS678 (*Computing for Scientific Research, Yale Graduate School of Arts and Sciences*) Final Project, c/o Peter Bowman-Davis, 2023. Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the framework to include another first order ODE (exponential curve) and two second order ODEs (simple harmonic oscilator and damped harmonic oscillator). Additionally, I explore the effects of hyperparameters on the performance of these systems in these simple demonstrations. Additionally, I implement a methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
 
+
+
 ## Abstract
 
 Physics-Informed-Neural-Networks (PINNs) offer an alternative numerical method to solving initial value problems (IVPs) in differential equations. Notably, they offer the competitive advantage of being highly parallelizable in comparison to conventional methods by nature of their main limiting factor being the chosen neural network hyperparameters. In this paper, I present a framework for setting up a generalizable method for solving IVPs using PINNs, discuss assorted drawbacks and propose possible solutions for future research. 
@@ -43,21 +45,35 @@ loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weig
 ```
 
 ## Experiments
-
-### Exponential: $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
+### Differential Equations Tested
+#### Exponential: $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/exponential.gif)
 
-### Simple Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+#### Simple Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/Harmonic.gif)
 
-### Damped Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
+#### Damped Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.gif)
 
-### Sparse Data Regression on $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+#### Sparse Data Regression on $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/HarmonicSparseData.gif)
 
-### Dynamic Weighting of Interior and Boundary Terms
+
+### Experimental Methodologies Tested
+
+#### Hyperparameter Variation  
+
+The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values.  
+
+#### Dynamic Hyperparameter Weighting  
+
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/dynamic_loss.gif)
+
+Certain systems can be designed to allow for dynamically adjusting the weight hyperparameters based on epoch time. This is due to the fact that during the course of training, the loss function may vary significantly, resulting in highly nonlinear behavior. In order to evaluate the system, a static loss function must be created for assessment purposes.
+  
+ The basic idea behind this approach is to first ensure that the model is fitted to its initial value, and then adjust the weights towards interior losses. By dynamically altering the weight hyperparameters, the system can continuously improve and adapt to the changing loss function throughout the training process. This allows for a more efficient and effective training of the model, ultimately resulting in better performance and accuracy.
+
+
 
 ## Summary
 

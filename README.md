@@ -19,7 +19,7 @@ One of the significant advantages of using a PINN over other numerical methods s
 
 Overall, Physics-Informed Neural Networks offer a powerful and flexible approach to solving differential equations in various fields, including physics, engineering, and other sciences. By incorporating the underlying physics principles directly into the neural network's loss function, the PINN can more accurately predict and learn from complex, high-dimensional data.
 
-## Architecture
+## Architecture / Methodology
 
 The generalized architecture of the neural network used in the proceeding experiments can be found in [pinn.py](https://github.com/P-H-B-D/678_PINN/blob/main/pinn.py). 
 
@@ -42,6 +42,7 @@ weight_boundary = 1.0
 loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weight_boundary * loss(boundary, torch.zeros_like(boundary))
 ```
 
+## Experiments
 
 ### Exponential: $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/exponential.gif)
@@ -58,8 +59,17 @@ loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weig
 ### Dynamic Weighting of Interior and Boundary Terms
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/dynamic_loss.gif)
 
+## Summary
 
-References:
+The use of Physics-Informed Neural Networks (PINNs) has gained significant popularity in recent years due to their ability to solve partial differential equations (PDEs) with high accuracy. However, one of the biggest challenges when using PINNs is finding the right hyperparameters. The process of selecting the optimal values for the hyperparameters can be extremely difficult and time-consuming. Fortunately, PINNs are parallelizable, which makes hyperparameter optimization easier with methods like Grid Search or Bayesian Optimization.
+
+Another challenge in using PINNs is the highly complex nature of the functions being solved. This complexity results in a smaller convergence radius for hyperparameters, making it even more challenging to get the right values. The weighting of boundary versus interior points is also highly nonlinear and can be difficult to understand intuitively.
+
+Furthermore, the architecture of the PDEs can be tricky to set up, which requires significant expertise in both physics and machine learning. Additionally, the training methodology for PINNs is not conducive to out-of-bounds forecasting, which means that the network's accuracy may not be reliable when making predictions outside of the training data range.
+
+Overall, while PINNs offer significant advantages in solving PDEs, their implementation can be challenging due to the complexity of the functions, the difficulty in selecting the right hyperparameters, and the need for expertise in both physics and machine learning.
+
+## References:
 * NN Base Code https://github.com/madagra/basic-pinn 
 * PINN Theory https://www.sciencedirect.com/science/article/pii/S0021999118307125
 * PINN Theory https://www.nature.com/articles/s42254-021-00314-5  

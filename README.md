@@ -8,16 +8,16 @@ Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the
 
 Additionally, I implement a methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
 
-### Exponential
+### Exponential: $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/exponential.gif)
 
-### Simple Harmonic Oscillator
+### Simple Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/Harmonic.gif)
 
-### Damped Harmonic Oscillator
+### Damped Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.gif)
 
-### Sparse Data Regression
+### Sparse Data Regression on $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/HarmonicSparseData.gif)
 
 ### Dynamic Weighting of Interior and Boundary Terms

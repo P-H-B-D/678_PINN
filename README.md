@@ -24,17 +24,17 @@ Overall, Physics-Informed Neural Networks offer a powerful and flexible approach
 The generalized architecture of the neural network used in the proceeding experiments can be found in [pinn.py](https://github.com/P-H-B-D/678_PINN/blob/main/pinn.py). 
 
 The loss function for a given differential equation may be constructed by finding an equation for the differential equation equal to zero, and using this as the interior loss function, e.g. from [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py): 
-```
+```python
 # interior loss
 f_value = f(x, params)
 interior = dfdx(x, params) - R * f_value #for exponential equation df/dt=Rf -> df/dt-Rf=0
 ```
 Next, we define the loss function at the boundary condition by simply evaluating the differential equation at this point and finding the MSE versus zero: 
-```
+```python
 boundary = f(x_boundary, params) - f_boundary
 ```
 Finally, we construct the final loss function b ased on the weights of the constituent losses:
-```
+```python
 loss = nn.MSELoss()
 weight_interior = 8.0
 weight_boundary = 1.0 

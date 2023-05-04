@@ -63,17 +63,45 @@ loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weig
 
 #### Hyperparameter Variation  
 
-The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values.  
+The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values. 
+
+
 
 #### Dynamic Hyperparameter Weighting  
 
-![](https://github.com/P-H-B-D/678_PINN/blob/main/dynamic_loss.gif)
-
 Certain systems can be designed to allow for dynamically adjusting the weight hyperparameters based on epoch time. This is due to the fact that during the course of training, the loss function may vary significantly, resulting in highly nonlinear behavior. In order to evaluate the system, a static loss function must be created for assessment purposes.
   
- The basic idea behind this approach is to first ensure that the model is fitted to its initial value, and then adjust the weights towards interior losses. By dynamically altering the weight hyperparameters, the system can continuously improve and adapt to the changing loss function throughout the training process. This allows for a more efficient and effective training of the model, ultimately resulting in better performance and accuracy.
+The basic idea behind this approach is to first ensure that the model is fitted to its initial value, and then adjust the weights towards interior losses. By dynamically altering the weight hyperparameters, the system can continuously improve and adapt to the changing loss function throughout the training process. This allows for a more efficient and effective training of the model, ultimately resulting in better performance and accuracy.
 
+For example, in the construction of the loss function, one may add integrate arguments for the epoch and max epoch into the loss function:
+```python
+def loss_fn(params: torch.Tensor, x: torch.Tensor,epoch: int, num_epochs: int):
+.
+.
+.
+  weight_interior = (1-(epoch/num_epochs))
+  weight_boundary_1 = ((epoch/num_epochs))
+  weight_boundary_2 = ((epoch/num_epochs))
+```
 
+The code for this section may be found in [DynamicWeighting.py](https://github.com/P-H-B-D/678_PINN/blob/main/DynamicWeighting.py)
+
+#### Interior -> Boundary: 
+![](https://github.com/P-H-B-D/678_PINN/blob/main/dynamic_loss_interior_boundary.gif)
+
+#### Boundary -> Interior: 
+![](https://github.com/P-H-B-D/678_PINN/blob/main/dynamic_loss_boundary_interior.gif)
+
+#### Baseline + Boundary -> Interior:
+
+Noting that performance seems to be better on the boundary -> interior trial, we can try adding a baseline to the loss function, e.g. using 
+```python
+weight_interior = 0.35+((epoch/num_epochs))
+weight_boundary_1 = 0.35+(1-(epoch/num_epochs))
+weight_boundary_2 = 0.35+(1-(epoch/num_epochs))
+```
+This boosts performance by decreasing the variance of values within the range, while possibly providing a boost in performance over static methods (though this has yet to be evaluated). 
+![](https://github.com/P-H-B-D/678_PINN/blob/main/baseline_dynamic_loss_interior_boundary.gif)
 
 ## Summary
 

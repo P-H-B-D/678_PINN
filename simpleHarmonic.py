@@ -138,16 +138,16 @@ if __name__ == "__main__":
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
     #save to gif
-    # anim.save('Harmonic.gif', dpi=80, writer='imagemagick')
+    anim.save('25.gif', dpi=80, writer='imagemagick')
 
     plt.show()
 
-    # plot loss evolution
-    plt.plot(loss_evolution)
-    plt.title("Loss evolution")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.show()
+    # # plot loss evolution
+    # plt.plot(loss_evolution)
+    # plt.title("Loss evolution")
+    # plt.xlabel("Epoch")
+    # plt.ylabel("Loss")
+    # plt.show()
     
     
     

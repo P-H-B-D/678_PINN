@@ -25,7 +25,7 @@ Physics-Informed Neural Networks offer a powerful and flexible approach to solvi
 
 The generalized architecture of the neural network underpinning the proceeding experiments can be found in [pinn.py](https://github.com/P-H-B-D/678_PINN/blob/main/pinn.py). 
 
-The loss function for a given differential equation may be constructed by finding an equation for the differential equation equal to zero, and using this as the interior loss function, e.g. from [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py): 
+The loss function for a given differential equation may be constructed by finding an equation for the differential equation equal to zero, and using this as the interior loss function, e.g. from [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py):
 ```python
 # interior loss
 f_value = f(x, params)
@@ -44,7 +44,19 @@ weight_boundary = 1.0
 loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weight_boundary * loss(boundary, torch.zeros_like(boundary))
 ```
 
-This loss is sampled at various points along the domain (the amount of which samples is determined by the *batch-size* hyperparameter), and the adjustment is backpropogated using the standard adam optimizer. 
+This loss is sampled at various points along the domain (the amount of which samples is determined by the *batch-size* hyperparameter), and the adjustment is backpropogated using the standard adam optimizer e.g.:
+
+```python
+# Sample points in the domain randomly for each epoch
+x = torch.FloatTensor(batch_size).uniform_(domain[0], domain[1])
+
+# Update the parameters
+loss = loss_fn(params, x)
+loss_evolution.append(loss.item())
+params = optimizer.step(loss, params)
+```
+
+More intelligent selection of the random samples so as to most optimally capture the features of the function is a possible direction of future research that could boost performance of the network as a whole. 
 
 ## Experiments
 ### Differential Equations Tested

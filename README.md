@@ -48,6 +48,9 @@ This loss is sampled at various points along the domain (the amount of which sam
 
 ## Experiments
 ### Differential Equations Tested
+#### Logistic [Logistic.py](https://github.com/P-H-B-D/678_PINN/blob/main/logistic.py):
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/logistic.gif)
+
 #### Exponential [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py): $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/exponential.gif)
 

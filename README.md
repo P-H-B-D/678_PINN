@@ -1,6 +1,6 @@
 # 678_PINN
 
-A Variety of Physics Informed Neural Network (PINN) demonstrations for PHYS678 (*Computing for Scientific Research, Yale Graduate School of Arts and Sciences*) Final Project, c/o Peter Bowman-Davis, 2023. Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the framework to include another first order ODE (exponential curve) and two second order ODEs (simple harmonic oscilator and damped harmonic oscillator). Additionally, I demonstrate a data-sparse implementation of these PINNs which allow for the learning process to be accelerated through sparse or rich sample data. Next, I explore the effects of varying hyperparameters on the performance of these systems in these simple demonstrations. Finally, I implement a novel methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
+A variety of Physics Informed Neural Network (PINN) demonstrations for PHYS678 (*Computing for Scientific Research, Yale Graduate School of Arts and Sciences*) Final Project, c/o Peter Bowman-Davis, 2023. Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the framework to include another first order ODE (exponential curve) and two second order ODEs (simple harmonic oscilator and damped harmonic oscillator). Additionally, I demonstrate a data-sparse implementation of these PINNs which allow for the learning process to be accelerated through sparse or rich sample data. Next, I explore the effects of varying hyperparameters on the performance of these systems in these simple demonstrations. Finally, I implement a novel methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
 
 
 
@@ -48,17 +48,56 @@ This loss is sampled at various points along the domain (the amount of which sam
 
 ## Experiments
 ### Differential Equations Tested
+
+In the following experiments, the most equations and their most convergent hyperparameters are shown. These hyperparameters were manually found by trying different values and evaluating loss. For many of the following examples, many hyperparameters were found to not converge (e.g. the resultant fit was very poor) before appropriate ones were attained. 
+
 #### Logistic [Logistic.py](https://github.com/P-H-B-D/678_PINN/blob/main/logistic.py):
+Hyperparameters:
+* Hidden Layers: 4
+* Neurons Per Layer: 10
+* Learning Rate: 1e-2
+* Loss Weighting: 
+  * Interior: 1.0 
+  * Boundary: 3.0 
+* Batch Size: 30
+
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/logistic.gif)
 
 #### Exponential [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py): $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
+Hyperparameters:
+* Hidden Layers: 5
+* Neurons Per Layer: 10
+* Learning Rate: 1e-2
+* Loss Weighting: 
+  * Interior: 8.0
+  * Boundary: 1.0 
+* Batch Size: 100
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/exponential.gif)
 
 #### Simple Harmonic Oscillator [simpleHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+Hyperparameters:
+* Hidden Layers: 4
+* Neurons Per Layer: 20
+* Learning Rate: 1e-2
+* Loss Weighting: 
+  * Interior: 3.0 
+  * Boundary 1 (f(x)): 1.0 
+  * Boundary 2 (f'(x)): 1.0 
+* Batch Size: 100
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/Harmonic.gif)
 
 #### Damped Harmonic Oscillator [dampedHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
 This is an example of a differential equation which the network struggles to converge to, even at hyperparameters that are well-suited to solving the problem. This is a common problem that arised throughout experimentation which highly irregular, complex, or oscillatory functions. In these cases, nonconvergence or partial convergence (in which some, but not all features would be converged to) was common. However, this could be alleviated by using a higher parameter model, modifying other hyperparameters such as learning rate, or increasing the num_epochs. 
+
+Hyperparameters:
+* Hidden Layers: 4
+* Neurons Per Layer: 20
+* Learning Rate: 2e-2
+* Loss Weighting: 
+  * Interior: 3.0 
+  * Boundary 1 (f(x)): 1.0 
+  * Boundary 2 (f'(x)): 1.0 
+* Batch Size: 100
 
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/dampedHarmonic.gif)
 

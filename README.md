@@ -11,7 +11,7 @@ Physics-Informed-Neural-Networks (PINNs) offer an alternative numerical method t
 
 ## Introduction
 
-The concept of being "Physics-Informed" in the context of machine learning and neural networks is quite simple. It means that the differential equation(s) of interest are integrated into the loss function of a neural network-driven regression. This process involves incorporating certain aspects of the differential equation(s) into the neural network model, allowing the model to learn and predict based on these underlying physics principles.
+The term, "Physics-Informed", in the context of machine learning and neural networks means that features of the differential equation(s) of interest are integrated into the loss function of a neural network-driven regression. This process involves incorporating certain aspects of the differential equation(s) into the neural network model, allowing the model to learn and predict based on these underlying physics principles.
 
 There are several aspects of the differential equation(s) that are typically integrated into the loss function of a physics-informed neural network (PINN). These include the boundary value loss and the "residual" or "interior" loss. The boundary value loss is used to compare the neural network output with given initial value(s), while the residual loss is used to evaluate the autodiff of the neural network output using the given differential equation. By constructing the neural network loss function in such a way that it is minimized, the PINN can automatically satisfy the underlying differential equation(s).
 
@@ -19,7 +19,7 @@ The architecture of a basic estimator neural network for PINNs in PyTorch consis
 
 One of the significant advantages of using a PINN over other numerical methods such as Runge-Kutta is that it is parallelizable and more efficient in high-dimensional or complex initial value problems (IVPs). Additionally, PINNs are uniquely flexible at integrating novel factors into the loss function, making them particularly useful for sparse or incomplete datasets. Furthermore, PINNs are composable with other numerical methods, allowing users to combine PINNs with other techniques to further improve their predictive capabilities.
 
-Overall, Physics-Informed Neural Networks offer a powerful and flexible approach to solving differential equations in various fields, including physics, engineering, and other sciences. By incorporating the underlying physics principles directly into the neural network's loss function, the PINN can more accurately predict and learn from complex, high-dimensional data.
+Physics-Informed Neural Networks offer a powerful and flexible approach to solving differential equations in various fields, including physics, engineering, and other sciences. By incorporating the underlying physics principles directly into the neural network's loss function, the PINN can more accurately predict and learn from complex, high-dimensional data.
 
 ## Architecture / Methodology
 
@@ -46,16 +46,26 @@ loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weig
 
 ## Experiments
 ### Differential Equations Tested
-#### Exponential: $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
+#### Exponential [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py): $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/exponential.gif)
 
-#### Simple Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+#### Simple Harmonic Oscillator [simpleHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/Harmonic.gif)
 
-#### Damped Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
+#### Damped Harmonic Oscillator [dampedHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.gif)
 
-#### Sparse Data Regression on $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+#### Sparse Example Data [(simpleHarmonicExperimentalData.py)](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonicExperimentalData.py) on $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+
+It is very simple to incorporate data (sparse or rich) into PINNs by introducing an additional loss term, e.g. : 
+```python
+#data loss
+f_data = f(x_data, params)
+loss = nn.MSELoss()
+data_loss = loss(f_data, y_data)
+```
+Which simply evaluates the loss of the PINN at the given datapoints in the current epoch.
+
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/HarmonicSparseData.gif)
 
 
@@ -63,8 +73,7 @@ loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weig
 
 #### Hyperparameter Variation  
 
-The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values. 
-
+The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values. A few permutations are shown here:
 
 
 #### Dynamic Hyperparameter Weighting  

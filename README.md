@@ -1,6 +1,8 @@
-# 678_PINN
+# Physics-Informed-Neural-Network Approaches to Solving IVPs.
 
-A variety of Physics Informed Neural Network (PINN) demonstrations for PHYS678 (*Computing for Scientific Research, Yale Graduate School of Arts and Sciences*) Final Project, c/o Peter Bowman-Davis, 2023. Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the framework to include another first order ODE (exponential curve) and two second order ODEs (simple harmonic oscilator and damped harmonic oscillator). Additionally, I demonstrate a data-sparse implementation of these PINNs which allow for the learning process to be accelerated through sparse or rich sample data. Next, I explore the effects of varying hyperparameters on the performance of these systems in these simple demonstrations. Finally, I implement a novel methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
+A variety of Physics Informed Neural Network (PINN) demonstrations for PHYS678 (*Computing for Scientific Research, Yale Graduate School of Arts and Sciences*) Final Project, c/o Peter Bowman-Davis, 2023. 
+
+Based off of the codebase of https://github.com/madagra/basic-pinn, I expand the framework to include another first order ODE (exponential curve) and two second order ODEs (simple harmonic oscilator and damped harmonic oscillator). Additionally, I demonstrate a data-sparse implementation of these PINNs which allow for the learning process to be accelerated through sparse or rich sample data. Next, I explore the effects of varying hyperparameters on the performance of these systems in these simple demonstrations. Finally, I implement a novel methodology for dynamically weighting the contribution of the interior and boundary term weights, decreasing them with iteration, resulting in performance enhancements for a variety of differential equations.
 
 
 

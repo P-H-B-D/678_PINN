@@ -109,8 +109,22 @@ It is very simple to incorporate data (sparse or rich) into PINNs by introducing
 f_data = f(x_data, params)
 loss = nn.MSELoss()
 data_loss = loss(f_data, y_data)
+.
+.
+.
+weight_interior = 0.25
+weight_boundary_1 = 0.37
+weight_boundary_2 = 0.37
+weight_data = 1.0
+
+loss_value = (
+    weight_interior * loss(interior, torch.zeros_like(interior))
+    + weight_boundary_1 * loss(boundary_1, torch.zeros_like(boundary_1))
+    + weight_boundary_2 * loss(boundary_2, torch.zeros_like(boundary_2))
+    + weight_data * data_loss
+)
 ```
-Which simply evaluates the loss of the PINN at the given datapoints in the current epoch. Note the performance benefits of this setup compared to the previous harmonic example, which uses identical hyperparameters.
+Which simply evaluates the MSE between the output of the PINN against the given datapoints in each epoch, along with other losses. It should be noted that this setup converges to a close approximation much faster than the above harmonic oscillator solution, which uses identical hyperparameters. This demonstrates the feasibility of fusion between conventional numerical methods and PINNs by integrating numerical sample data into the training process of PINNs, even if the sample data is sparse. 
 
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/HarmonicSparseData.gif)
 

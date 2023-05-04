@@ -76,10 +76,20 @@ Which simply evaluates the loss of the PINN at the given datapoints in the curre
 
 ### Experimental Methodologies Tested
 
-#### Hyperparameter Variation  
+#### Weight Hyperparameter Variation  
 
-The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values. A few permutations are shown here:
+The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values. A few permutations are shown here. Note that for each demonstration, the hyperparameter values have been normalized so that they do not affect the learning rate:
 
+In the format (Interior, Boundary 1, Boundary 2), where Boundary 1 = f(0), Boundary 2= f'(0). Note how in the third example the network "snaps to" the initial value at f(0)=1, f'(0)=0, and in the preceeding two examples, the movement toward the IC is much more gradual: 
+
+(0.71,0.14,0.14):
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/71.gif)
+
+(0.43,0.28,0.28):
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/43.gif)
+
+(0.25,0.37,0.37):
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/25.gif)
 
 #### Dynamic Hyperparameter Weighting  
 
@@ -117,13 +127,11 @@ This boosts performance by decreasing the variance of values within the range, w
 
 ## Summary
 
-The use of Physics-Informed Neural Networks (PINNs) has gained significant popularity in recent years due to their ability to solve partial differential equations (PDEs) with high accuracy. However, one of the biggest challenges when using PINNs is finding the right hyperparameters. The process of selecting the optimal values for the hyperparameters can be extremely difficult and time-consuming. Fortunately, PINNs are parallelizable, which makes hyperparameter optimization easier with methods like Grid Search or Bayesian Optimization.
+The use of Physics-Informed Neural Networks (PINNs) has gained significant popularity in recent years due to their ability to solve partial differential equations (PDEs) with high accuracy. However, one of the biggest challenges when using PINNs is finding the right hyperparameters. The process of selecting the optimal values for the hyperparameters can be extremely difficult and time-consuming. Fortunately, PINNs are parallelizable, which makes hyperparameter optimization easier with methods like Grid Search or Bayesian Optimization. 
 
-Another challenge in using PINNs is the highly complex nature of the functions being solved. This complexity results in a smaller convergence radius for hyperparameters, making it even more challenging to get the right values. The weighting of boundary versus interior points is also highly nonlinear and can be difficult to understand intuitively.
+Another challenge in using PINNs is the highly complex nature of the functions being solved. This complexity results in a smaller "convergence radius" for hyperparameters, making it even more challenging to get the right values. The weighting of boundary versus interior points is also highly nonlinear and can be difficult to understand intuitively. Furthermore, the architecture of the PDEs can be tricky to set up, which requires significant expertise in both physics and machine learning. Additionally, the training methodology for PINNs is not conducive to out-of-bounds forecasting, which means that the network's accuracy may not be reliable when making predictions outside of the training data range. 
 
-Furthermore, the architecture of the PDEs can be tricky to set up, which requires significant expertise in both physics and machine learning. Additionally, the training methodology for PINNs is not conducive to out-of-bounds forecasting, which means that the network's accuracy may not be reliable when making predictions outside of the training data range.
-
-Overall, while PINNs offer significant advantages in solving PDEs, their implementation can be challenging due to the complexity of the functions, the difficulty in selecting the right hyperparameters, and the need for expertise in both physics and machine learning.
+Despite these challenges, the simplicity of the PINN architecture paired with its scaleability makes it an attractive alternative to traditional differential equation solvers, particularly when numerical integration techniques are excessively computationally expensive. 
 
 ## References:
 * NN Base Code https://github.com/madagra/basic-pinn 

@@ -11,19 +11,19 @@ Physics-Informed-Neural-Networks (PINNs) offer an alternative numerical method t
 
 ## Introduction
 
-The concept of being "Physics-Informed" in the context of machine learning and neural networks is quite simple. It means that the differential equation(s) of interest are integrated into the loss function of a neural network-driven regression. This process involves incorporating certain aspects of the differential equation(s) into the neural network model, allowing the model to learn and predict based on these underlying physics principles.
+The term, "Physics-Informed", in the context of machine learning and neural networks means that features of the differential equation(s) of interest are integrated into the loss function of a neural network-driven regression. This process involves incorporating certain aspects of the differential equation(s) into the neural network model, allowing the model to learn and predict based on these underlying physics principles.
 
-There are several aspects of the differential equation(s) that are typically integrated into the loss function of a physics-informed neural network (PINN). These include the boundary value loss and the "residual" or "interior" loss. The boundary value loss is used to compare the neural network output with given initial value(s), while the residual loss is used to evaluate the autodiff of the neural network output using the given differential equation. By constructing the neural network loss function in such a way that it is minimized, the PINN can automatically satisfy the underlying differential equation(s).
+There are several aspects of the differential equation(s) that are typically integrated into the loss function of a physics-informed neural network (PINN). These include the boundary value loss and the "residual" or "interior" loss. The boundary value loss is used to compare the neural network output with given initial value(s), while the residual loss is used to evaluate the autodiff of the neural network output using the given differential equation. By constructing the neural network loss function in such a way that it is minimized, the PINN can automatically satisfy the underlying differential equation(s). 
 
-The architecture of a basic estimator neural network for PINNs in PyTorch consists of N layers of M neurons each, with a hyperbolic tangent (Tanh) activation function. The architecture's hyperparameters include the number of hidden layers, the number of neurons per layer, the learning rate, the batch size, and the loss weighting. Careful selection of these hyperparameters is necessary, as they can significantly impact the network's learning rate.
+The architecture of a basic estimator neural network for PINNs can be implemented in PyTorch, consisting of N layers of M neurons each, with a hyperbolic tangent (Tanh) activation function. The architecture's hyperparameters include the number of hidden layers, the number of neurons per layer, the learning rate, the batch size, and the loss weighting. Careful selection of the loss weighting hyperparameters is necessary, as they can also affect the learning rate if not normalized.
 
-One of the significant advantages of using a PINN over other numerical methods such as Runge-Kutta is that it is parallelizable and more efficient in high-dimensional or complex initial value problems (IVPs). Additionally, PINNs are uniquely flexible at integrating novel factors into the loss function, making them particularly useful for sparse or incomplete datasets. Furthermore, PINNs are composable with other numerical methods, allowing users to combine PINNs with other techniques to further improve their predictive capabilities.
+One of the significant advantages of using a PINN over other numerical methods such as Runge-Kutta is that it is parallelizable and more efficient in high-dimensional or complex initial value problems (IVPs). Additionally, PINNs are uniquely flexible at integrating novel factors into the loss function, making them particularly useful for sparse or incomplete datasets (as demonstrated in [simpleHarmonicExperimentalData.py](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonicExperimentalData.py)). Furthermore, PINNs are composable with other numerical methods, allowing users to combine PINNs with other techniques to further improve their predictive capabilities, notably by first computing sparse values for the function using RK or similar numerical methods, then integrating these outputs into the loss function. 
 
-Overall, Physics-Informed Neural Networks offer a powerful and flexible approach to solving differential equations in various fields, including physics, engineering, and other sciences. By incorporating the underlying physics principles directly into the neural network's loss function, the PINN can more accurately predict and learn from complex, high-dimensional data.
+Physics-Informed Neural Networks offer a powerful and flexible approach to solving differential equations in various fields, including physics, engineering, and other sciences. By incorporating the underlying physics principles directly into the neural network's loss function, the PINN can more accurately predict and learn from complex, high-dimensional data. It should be noted that while the below implementations only solve ODEs of various order, it is possible to construct similar analogues for solving PDEs such as the heat equation or the Navier-Stokes Equation, which would use the partial derivatives in the loss function rather than the total derivatives. However, for the sake of simplicity, these examples will be constrained to ODEs.
 
 ## Architecture / Methodology
 
-The generalized architecture of the neural network used in the proceeding experiments can be found in [pinn.py](https://github.com/P-H-B-D/678_PINN/blob/main/pinn.py). 
+The generalized architecture of the neural network underpinning the proceeding experiments can be found in [pinn.py](https://github.com/P-H-B-D/678_PINN/blob/main/pinn.py). 
 
 The loss function for a given differential equation may be constructed by finding an equation for the differential equation equal to zero, and using this as the interior loss function, e.g. from [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py): 
 ```python
@@ -35,7 +35,7 @@ Next, we define the loss function at the boundary condition by simply evaluating
 ```python
 boundary = f(x_boundary, params) - f_boundary
 ```
-Finally, we construct the final loss function b ased on the weights of the constituent losses:
+Finally, we construct the final loss function based on the weights of the constituent losses:
 ```python
 loss = nn.MSELoss()
 weight_interior = 8.0
@@ -44,18 +44,30 @@ weight_boundary = 1.0
 loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weight_boundary * loss(boundary, torch.zeros_like(boundary))
 ```
 
+This loss is sampled at various points along the domain (the amount of which samples is determined by the *batch-size* hyperparameter), and the adjustment is backpropogated using the standard adam optimizer. 
+
 ## Experiments
 ### Differential Equations Tested
-#### Exponential: $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
+#### Exponential [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py): $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/exponential.gif)
 
-#### Simple Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+#### Simple Harmonic Oscillator [simpleHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/Harmonic.gif)
 
-#### Damped Harmonic Oscillator: $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
+#### Damped Harmonic Oscillator [dampedHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.gif)
 
-#### Sparse Data Regression on $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+#### Sparse Example Data [(simpleHarmonicExperimentalData.py)](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonicExperimentalData.py) on $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
+
+It is very simple to incorporate data (sparse or rich) into PINNs by introducing an additional loss term, e.g. : 
+```python
+#data loss
+f_data = f(x_data, params)
+loss = nn.MSELoss()
+data_loss = loss(f_data, y_data)
+```
+Which simply evaluates the loss of the PINN at the given datapoints in the current epoch.
+
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/HarmonicSparseData.gif)
 
 
@@ -63,15 +75,12 @@ loss_value = weight_interior * loss(interior, torch.zeros_like(interior)) + weig
 
 #### Hyperparameter Variation  
 
-The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values. 
-
+The effects of varying weight hyperparameters can be elusive. The above demonstration shows the effects of weighting upon the resultant behavior of the system. While intuition as to the effects of each individual hyperparameter is relatively predictable, the combined effect of them on system stability or convergence is highly sensitive and unpredictable, making a hyperparameter search algorithm more ideal than simply guessing these values. A few permutations are shown here:
 
 
 #### Dynamic Hyperparameter Weighting  
 
-Certain systems can be designed to allow for dynamically adjusting the weight hyperparameters based on epoch time. This is due to the fact that during the course of training, the loss function may vary significantly, resulting in highly nonlinear behavior. In order to evaluate the system, a static loss function must be created for assessment purposes.
-  
-The basic idea behind this approach is to first ensure that the model is fitted to its initial value, and then adjust the weights towards interior losses. By dynamically altering the weight hyperparameters, the system can continuously improve and adapt to the changing loss function throughout the training process. This allows for a more efficient and effective training of the model, ultimately resulting in better performance and accuracy.
+In a novel technique that I demonstrate in this presentation, I propose that certain systems may lend themselves to dynamically adjusting the weight hyperparameters based on epoch time. The basic idea behind this approach is to first ensure that the model is fitted to its initial value, and then adjust the weights towards interior losses. By dynamically altering the weight hyperparameters, the system can continuously improve and adapt to the changing loss function throughout the training process. This allows for a more efficient and effective training of the model, ultimately resulting in better performance and accuracy. By dynamically changing the loss function, it becomes difficult for a human to assess model performance, since the criteria of assessment is changing over time. As a result, it is useful to construct a secondary "static" loss function for human evaluation purposes, which I plot alongside the dynamic loss (the loss that is fed into the optimizer for training). 
 
 For example, in the construction of the loss function, one may add integrate arguments for the epoch and max epoch into the loss function:
 ```python

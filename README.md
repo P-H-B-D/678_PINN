@@ -69,9 +69,7 @@ The effects of varying weight hyperparameters can be elusive. The above demonstr
 
 #### Dynamic Hyperparameter Weighting  
 
-Certain systems can be designed to allow for dynamically adjusting the weight hyperparameters based on epoch time. This is due to the fact that during the course of training, the loss function may vary significantly, resulting in highly nonlinear behavior. In order to evaluate the system, a static loss function must be created for assessment purposes.
-  
-The basic idea behind this approach is to first ensure that the model is fitted to its initial value, and then adjust the weights towards interior losses. By dynamically altering the weight hyperparameters, the system can continuously improve and adapt to the changing loss function throughout the training process. This allows for a more efficient and effective training of the model, ultimately resulting in better performance and accuracy.
+In a novel technique that I demonstrate in this presentation, I propose that certain systems may lend themselves to dynamically adjusting the weight hyperparameters based on epoch time. The basic idea behind this approach is to first ensure that the model is fitted to its initial value, and then adjust the weights towards interior losses. By dynamically altering the weight hyperparameters, the system can continuously improve and adapt to the changing loss function throughout the training process. This allows for a more efficient and effective training of the model, ultimately resulting in better performance and accuracy. By dynamically changing the loss function, it becomes difficult for a human to assess model performance, since the criteria of assessment is changing over time. As a result, it is useful to construct a secondary "static" loss function for human evaluation purposes, which I plot alongside the dynamic loss (the loss that is fed into the optimizer for training). 
 
 For example, in the construction of the loss function, one may add integrate arguments for the epoch and max epoch into the loss function:
 ```python

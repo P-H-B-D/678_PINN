@@ -77,9 +77,9 @@ def make_dynamic_loss_fn(f: Callable, d2fdx2: Callable) -> Callable:
         loss = nn.MSELoss()
 
         # Weighting of the loss
-        weight_interior = 0.25 + (1-(epoch/num_epochs))
-        weight_boundary_1 = 0.37 + ((epoch/num_epochs))
-        weight_boundary_2 = 0.37 + ((epoch/num_epochs))
+        weight_interior = (1-(epoch/num_epochs))
+        weight_boundary_1 = ((epoch/num_epochs))
+        weight_boundary_2 = ((epoch/num_epochs))
         print(1-(epoch/num_epochs))
 
         loss_value = (
@@ -188,7 +188,7 @@ if __name__ == "__main__":
         ax3.set_ylabel("Loss")
 
     anim = FuncAnimation(fig, update, frames=num_iter, interval=10, repeat=False)
-    anim.save('dynamic_loss.gif', dpi=80, writer='imagemagick')
+    anim.save('dynamic_loss_interior_boundary.gif', dpi=80, writer='imagemagick')
     plt.show()
 
     

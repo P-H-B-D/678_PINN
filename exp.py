@@ -148,12 +148,6 @@ if __name__ == "__main__":
     plt.ylabel("Loss")
     plt.show()
 
-    #plot the loss evolution
-    plt.plot(loss_evolution)
-    plt.title("Loss evolution")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
-    plt.show()
-
+    
     
 

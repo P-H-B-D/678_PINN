@@ -72,6 +72,7 @@ Hyperparameters:
   * Interior: 8.0
   * Boundary: 1.0 
 * Batch Size: 100
+
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/exponential.gif)
 
 #### Simple Harmonic Oscillator [simpleHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
@@ -84,6 +85,7 @@ Hyperparameters:
   * Boundary 1 (f(x)): 1.0 
   * Boundary 2 (f'(x)): 1.0 
 * Batch Size: 100
+
 ![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/Harmonic.gif)
 
 #### Damped Harmonic Oscillator [dampedHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$

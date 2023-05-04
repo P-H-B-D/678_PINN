@@ -49,13 +49,13 @@ This loss is sampled at various points along the domain (the amount of which sam
 ## Experiments
 ### Differential Equations Tested
 #### Exponential [exp.py](https://github.com/P-H-B-D/678_PINN/blob/main/exp.py): $\frac{df}{dt} = Rf(t),\ R\in\mathbb{R},\ f(0)=1$
-![](https://github.com/P-H-B-D/678_PINN/blob/main/exponential.gif)
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/exponential.gif)
 
 #### Simple Harmonic Oscillator [simpleHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
-![](https://github.com/P-H-B-D/678_PINN/blob/main/Harmonic.gif)
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/Harmonic.gif)
 
 #### Damped Harmonic Oscillator [dampedHarmonic.py](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.py): $\frac{d^2f}{dt^2} = -\frac{c}{m}\frac{df}{dt} - \frac{k}{m}f,\ c,k,m\in\mathbb{R},\ f(0)=1,\ \frac{df}{dt}(0)=0$
-![](https://github.com/P-H-B-D/678_PINN/blob/main/dampedHarmonic.gif)
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/dampedHarmonic.gif)
 
 #### Sparse Example Data [(simpleHarmonicExperimentalData.py)](https://github.com/P-H-B-D/678_PINN/blob/main/simpleHarmonicExperimentalData.py) on $\frac{d^2f}{dt^2} = -\frac{k}{m}f(t),\ k=1,\ m=1,\ f(0)=1,\ f'(0)=0$
 
@@ -68,7 +68,7 @@ data_loss = loss(f_data, y_data)
 ```
 Which simply evaluates the loss of the PINN at the given datapoints in the current epoch.
 
-![](https://github.com/P-H-B-D/678_PINN/blob/main/HarmonicSparseData.gif)
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/HarmonicSparseData.gif)
 
 
 ### Experimental Methodologies Tested
@@ -96,10 +96,10 @@ def loss_fn(params: torch.Tensor, x: torch.Tensor,epoch: int, num_epochs: int):
 The code for this section may be found in [DynamicWeighting.py](https://github.com/P-H-B-D/678_PINN/blob/main/DynamicWeighting.py)
 
 #### Interior -> Boundary: 
-![](https://github.com/P-H-B-D/678_PINN/blob/main/dynamic_loss_interior_boundary.gif)
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/dynamic_loss_interior_boundary.gif)
 
 #### Boundary -> Interior: 
-![](https://github.com/P-H-B-D/678_PINN/blob/main/dynamic_loss_boundary_interior.gif)
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/dynamic_loss_boundary_interior.gif)
 
 #### Baseline + Boundary -> Interior:
 
@@ -110,7 +110,7 @@ weight_boundary_1 = 0.35+(1-(epoch/num_epochs))
 weight_boundary_2 = 0.35+(1-(epoch/num_epochs))
 ```
 This boosts performance by decreasing the variance of values within the range, while possibly providing a boost in performance over static methods (though this has yet to be evaluated). 
-![](https://github.com/P-H-B-D/678_PINN/blob/main/baseline_dynamic_loss_interior_boundary.gif)
+![](https://github.com/P-H-B-D/678_PINN/blob/main/visuals/baseline_dynamic_loss_interior_boundary.gif)
 
 ## Summary
 
